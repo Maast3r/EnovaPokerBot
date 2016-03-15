@@ -1,24 +1,37 @@
-import urllib, urllib2, json
+import httplib, urllib2, json, time, urlparse
 
-playerKey = "deal-phase-key"
+playerKey = "turn-phase-key"
 
 def testGet():
+    time.sleep(1)
     try:
-        resp = urllib2.urlopen('https://enova-no-limit-code-em.herokuapp.com/sandbox/players/' + playerKey).read()
+        url = 'https://enova-no-limit-code-em.herokuapp.com/sandbox/players/' + playerKey
+        resp = urllib2.urlopen(url).read()
         parsed = json.loads(resp)
         print json.dumps(parsed, indent=4, sort_keys=True)
+        if parsed['your_turn']:
+            print "my turn"
     except urllib2.HTTPError, e:
         print "HTTP error: %d" % e.code
     except urllib2.URLError, e:
         print "Network error: %s" % e.reason.args[1]
 
-def testPost(action):
-    url_2 = 'https://enova-no-limit-code-em.herokuapp.com/sandbox/players/' + playerKey +'/' + action
-    req = urllib2.Request(url_2)
-    rsp = urllib2.urlopen(req)
-    content = rsp.read()
+def testPost(action, amount):
+    url = 'https://enova-no-limit-code-em.herokuapp.com/sandbox/players/' + playerKey +'/action'
+    data = None
+    if action == "bet" or action == "raise":
+        # data = "{'action_name': " + action + ", 'amount': " + amount + "}"
+        data = "action_name=" + action + "&amount=" + amount
+    else:
+        data = "action_name" + action
 
-    print content
+    urlparts = urlparse.urlparse(url)
+    conn = httplib.HTTPConnection(urlparts.netloc, urlparts.port or 80)
+    conn.request("POST", urlparts.path, data)
+    resp = conn.getresponse()
+    body = resp.read()
+    parsed = json.loads(body)
+    print json.dumps(parsed, indent=4, sort_keys=True)
 
 def deal():
     print 'deal'
@@ -35,4 +48,4 @@ def river():
 def calculateOddsOfWinning():
     print "23%"
 
-testGet()
+testPost('bet', '10')
