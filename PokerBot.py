@@ -4,6 +4,8 @@ end = 0
 winning = 0
 playerKey = "turn-phase-key"
 
+values = {'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
+
 def testGet():
     try:
         url = 'https://enova-no-limit-code-em.herokuapp.com/sandbox/players/' + playerKey
@@ -12,7 +14,7 @@ def testGet():
         print json.dumps(parsed, indent=4, sort_keys=True)
         if parsed['your_turn']:
             # detectWinning(parsed)
-            print "hi"
+            calculateOddsOfWinning(parsed)
     except urllib2.HTTPError, e:
         print "HTTP error: %d" % e.code
     except urllib2.URLError, e:
@@ -42,8 +44,12 @@ def detectWinning(resp):
         if player['stack'] >= resp['stack']:
             winning = 0
 
-def calculateOddsOfWinning():
-    print "23%"
+def calculateOddsOfWinning(resp):
+    if resp['betting_phase' == 'deal']:
+        deal(resp)
+
+def deal(resp):
+
 
 def runBot():
     while not end:
