@@ -2,8 +2,8 @@ import httplib, urllib2, json, time, urlparse
 
 end = 0
 winning = 0
-getKey = "d8dfad17-957d-48c2-a746-a9dde10b1874"
-postKey = 'd8dfad17-957d-48c2-a746-a9dde10b1874'
+getKey = "ed25b9a1-204e-4149-8c33-c7598a3d0774"
+postKey = 'ed25b9a1-204e-4149-8c33-c7598a3d0774'
 
 values = {'1': 1, '2': 2, '3': 3,
           '4': 4, '5': 5, '6': 6,'7': 7, '8': 8,
@@ -83,28 +83,25 @@ def deal(resp):
         playOn(resp, int(resp['current_bet'])/10)
 
 def flop(resp):
-    if int(resp['call_amount']) > 200:
-        testPost('fold', 0)
-    else:
-        card1 = values[resp['hand'][0][0]]
-        card2 = values[resp['hand'][1][0]]
-        suit1 = resp['hand'][0][1]
-        suit2 = resp['hand'][1][1]
+    card1 = values[resp['hand'][0][0]]
+    card2 = values[resp['hand'][1][0]]
+    suit1 = resp['hand'][0][1]
+    suit2 = resp['hand'][1][1]
 
-        communityCard1 = values[resp['community_cards'][0][0]]
-        communitysuit1 = resp['community_cards'][0][1]
-        communityCard2 = values[resp['community_cards'][1][0]]
-        communitysuit2 = resp['community_cards'][1][1]
-        communityCard3 = values[resp['community_cards'][2][0]]
-        communitysuit3 = resp['community_cards'][2][1]
-        # communityCard4 = values[resp['community_cards'][3][0]]
-        # communitysuit4 = resp['community_cards'][3][1]
-        # communityCard5 = values[resp['community_cards'][4][0]]
-        #communitysuit5 = resp['community_cards'][4][1]
-        if card1 == communityCard1 or card1 == card2 or card1 == communityCard2 or card1 == communityCard3 or card2 == communityCard1 or card2 == communityCard2 or card2 == communityCard3:
-            testPost('call', 0)
-        else:
-            testPost('fold', 0)
+    communityCard1 = values[resp['community_cards'][0][0]]
+    communitysuit1 = resp['community_cards'][0][1]
+    communityCard2 = values[resp['community_cards'][1][0]]
+    communitysuit2 = resp['community_cards'][1][1]
+    communityCard3 = values[resp['community_cards'][2][0]]
+    communitysuit3 = resp['community_cards'][2][1]
+    # communityCard4 = values[resp['community_cards'][3][0]]
+    # communitysuit4 = resp['community_cards'][3][1]
+    # communityCard5 = values[resp['community_cards'][4][0]]
+    #communitysuit5 = resp['community_cards'][4][1]
+    if card1 == communityCard1 or card1 == card2 or card1 == communityCard2 or card1 == communityCard3 or card2 == communityCard1 or card2 == communityCard2 or card2 == communityCard3:
+        testPost('call', 0)
+    else:
+        testPost('fold', 0)
 
 
 def playOn(resp, amount):
