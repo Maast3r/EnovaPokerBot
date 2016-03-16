@@ -82,6 +82,9 @@ def deal(resp):
     else:
         playOn(resp, int(resp['current_bet']/10))
 
+def flop(resp):
+    testPost('call', 0)
+
 def playOn(resp, amount):
     if amount > 0:
         testPost('raise', str(amount))
@@ -93,10 +96,7 @@ def playOn(resp, amount):
 def runBot():
     while not end:
         testGet()
-        # testPost()
         if not winning:
             time.sleep(1)
-            break
-        break
 
 runBot()
