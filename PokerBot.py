@@ -27,13 +27,13 @@ def testGet():
         print "Network error: %s" % e.reason.args[1]
 
 def testPost(action, amount):
-    print '`````````````````````   ' + action
     # bet, raise, call, check, fold
     end = 1
     url = 'https://enova-no-limit-code-em.herokuapp.com/sandbox/players/' + postKey +'/action'
     data = None
     if action == "bet" or action == "raise":
         data = "action_name=" + action + "&amount=" + amount
+
     else:
         data = "action_name=" + action
 
@@ -52,8 +52,10 @@ def detectWinning(resp):
             winning = 0
 
 def calculateOddsOfWinning(resp):
-   # if resp['betting_phase' == 'deal']:
+   if resp['betting_phase' == 'deal']:
         deal(resp)
+   else:
+        flop(resp)
 
 def deal(resp):
     card1 = values[resp['hand'][0][0]]
@@ -86,8 +88,7 @@ def playOn(resp, amount):
         if resp['call_amount']:
             testPost('call', 0)
         else:
-            testPost('check', 0)
-
+            testPost('raise', str(0))
 
 def runBot():
     while not end:
